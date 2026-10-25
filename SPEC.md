@@ -93,7 +93,8 @@ Where the brief was ambiguous the most conservative interpretation was taken.
    Filters apply to tables only, not views or enums.
 9. **`--schema`** applies to both sides. For MySQL it names the database; without it the
    database in the URL is used. For PostgreSQL the default is `public`. It is ignored for
-   snapshot sides.
+   snapshot sides. `--source-schema` / `--target-schema` override it per side (an addition
+   to the brief) so two schemas of one PostgreSQL database can be compared live.
 10. **Partitions**: PostgreSQL partition children are skipped; the partitioned parent is
     compared. Partitioning itself is out of scope.
 11. **Collation**: PostgreSQL reports a column collation only when it differs from the type
@@ -132,6 +133,13 @@ consistently across both engines, and a single query path per engine is easier t
 | views                      | `pg_get_viewdef()`                                                      | `information_schema.VIEWS.VIEW_DEFINITION`                 |
 | enum labels                | `pg_enum` ordered by `enumsortorder`                                    | inline in the column type (`enum('a','b')`)                |
 | server version             | `SHOW server_version`                                                   | `SELECT VERSION()`                                         |
+
+## Known limitations
+
+- MySQL creates an index for a foreign key when no existing index fits; that index is
+  reported when only one side has it.
+- Operator classes, deferrability, `NOT VALID`, partitions and triggers are not compared.
+- MariaDB and PostgreSQL older than 12 are untested.
 
 ## Security
 
