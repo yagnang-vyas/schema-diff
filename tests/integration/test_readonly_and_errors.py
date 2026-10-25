@@ -96,4 +96,4 @@ def test_mysql_without_database_asks_for_one() -> None:
         pytest.fail("SCHEMADIFF_MYSQL_URL is not set")
     url, dialect = parse_url(value)
     with pytest.raises(InputError, match="no MySQL database selected"):
-        inspect_database(url.set(database=None), dialect, None)
+        inspect_database(url.set(database=""), dialect, None)
